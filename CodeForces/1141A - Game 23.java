@@ -20,38 +20,23 @@ public class Main {
         OutputStream outputStream = System.out;
         InputReader in = new InputReader(inputStream);
         OutputWriter out = new OutputWriter(outputStream);
-        TaskA solver = new TaskA();
+        Task548A solver = new Task548A();
         solver.solve(1, in, out);
         out.close();
     }
 
-    static class TaskA {
+    static class Task548A {
         public void solve(int testNumber, InputReader in, OutputWriter out) {
-            long a = in.nextLong();
-            long b = in.nextLong();
-            int ans = 0;
-
-            if (b % a != 0) {
-                out.println(-1);
-                return;
+            int n = in.nextInt();
+            char arr[] = in.nextString().toCharArray();
+            int i;
+            long ans = 0;
+            for (i = 0; i < n; i++) {
+                int y = arr[i] - '0';
+                if (y % 2 == 0)
+                    ans += i + 1;
             }
-
-            b /= a;
-
-            while (b % 2 == 0) {
-                b /= 2;
-                ans++;
-            }
-
-            while (b % 3 == 0) {
-                b /= 3;
-                ans++;
-            }
-
-            if (b == 1)
-                out.println(ans);
-            else
-                out.println(-1);
+            out.println(ans);
         }
 
     }
@@ -85,7 +70,7 @@ public class Main {
             return buf[curChar++];
         }
 
-        public long nextLong() {
+        public int nextInt() {
             int c = read();
             while (isSpaceChar(c)) {
                 c = read();
@@ -95,7 +80,7 @@ public class Main {
                 sgn = -1;
                 c = read();
             }
-            long res = 0;
+            int res = 0;
             do {
                 if (c < '0' || c > '9') {
                     throw new InputMismatchException();
@@ -105,6 +90,21 @@ public class Main {
                 c = read();
             } while (!isSpaceChar(c));
             return res * sgn;
+        }
+
+        public String nextString() {
+            int c = read();
+            while (isSpaceChar(c)) {
+                c = read();
+            }
+            StringBuilder res = new StringBuilder();
+            do {
+                if (Character.isValidCodePoint(c)) {
+                    res.appendCodePoint(c);
+                }
+                c = read();
+            } while (!isSpaceChar(c));
+            return res.toString();
         }
 
         public boolean isSpaceChar(int c) {
@@ -140,7 +140,7 @@ public class Main {
             writer.close();
         }
 
-        public void println(int i) {
+        public void println(long i) {
             writer.println(i);
         }
 
