@@ -18,7 +18,7 @@ import java.io.InputStream;
  * Built using CHelper plug-in
  * Actual solution is at the top
  */
-public class Main {
+public class C {
     public static void main(String[] args) {
         InputStream inputStream = System.in;
         OutputStream outputStream = System.out;
@@ -32,7 +32,35 @@ public class Main {
     static class CGA {
         public void solve(int testNumber, InputReader in, OutputWriter out) {
             int t = in.nextInt();
-            System.out.println("Hello" + t);
+            while(t-->0){
+                String s = in.nextString();
+
+                String hours = s.substring(0, 2);
+                String minutes = s.substring(3, 5);
+
+                int h = Integer.parseInt(hours);
+                
+
+                String mode = "AM";
+
+                if(h>=12){
+                    mode = "PM";
+                    h -=12;
+                }
+
+                if(h == 0){
+                    h = 12;
+                }
+
+                String hourString = Integer.toString(h);
+                if(h<10){
+                    hourString = "0" + hourString;
+                }
+                
+                System.out.println(hourString + ":" + minutes + " " + mode);
+
+            }
+
             
         }
 
@@ -70,6 +98,21 @@ public class Main {
 
         public InputReader(InputStream stream) {
             this.stream = stream;
+        }
+
+        public String nextString() {
+            int c = read();
+            while (isSpaceChar(c)) {
+                c = read();
+            }
+            StringBuilder res = new StringBuilder();
+            do {
+                if (Character.isValidCodePoint(c)) {
+                    res.appendCodePoint(c);
+                }
+                c = read();
+            } while (!isSpaceChar(c));
+            return res.toString();
         }
 
         public int read() {

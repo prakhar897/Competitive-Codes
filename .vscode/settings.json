@@ -1,0 +1,12 @@
+{
+	"[java]": {
+		"editor.defaultFormatter": "redhat.java",
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": "always"
+		}
+	},
+	"java.format.settings.url": "path/to/eclipse-formatter.xml",
+	"java.saveActions.organizeImports": true,
+	"editor.formatOnSave": true,
+	"editor.formatOnPaste": true
+}
