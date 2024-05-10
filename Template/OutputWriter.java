@@ -1,4 +1,4 @@
-package net.egork.chelper.util;
+package template;
 
 import java.io.IOException;
 import java.io.OutputStream;

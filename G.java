@@ -1,14 +1,98 @@
-package template;
-
+import java.io.OutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.BufferedWriter;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.InputMismatchException;
+import java.io.IOException;
+import java.io.Writer;
+import java.io.OutputStreamWriter;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.InputMismatchException;
 
+
+import java.util.*;
+
 /**
- * @author Egor Kulikov (kulikov@devexperts.com)
+ * Built using CHelper plug-in
+ * Actual solution is at the top
  */
-public class InputReader extends InputStream {
+public class G {
+    public static void main(String[] args) {
+        InputStream inputStream = System.in;
+        OutputStream outputStream = System.out;
+        InputReader in = new InputReader(inputStream);
+        OutputWriter out = new OutputWriter(outputStream);
+        CGA solver = new CGA();
+        solver.solve(1, in, out);
+        out.close();
+    }
+
+    class Node{
+
+        String genre;
+        String name;
+
+        public Node(String genre, String name){
+            this.genre = genre;
+            this.name = name;
+           
+        }
+
+    }
+
+    static class CGA {
+        public void solve(int testNumber, InputReader in, OutputWriter out) {
+            int t = in.readInt();
+            outer:while(t-->0){
+                int n = in.readInt();
+                HashMap<String, ArrayList<Nodes>> genreMap = new HashMap<>();
+                 HashMap<String, ArrayList<Nodes>> nameMap = new HashMap<>();
+
+                for(int i=0;i<n;i++){
+                    String genre = in.readToken();
+                    String name = in.readToken();
+
+                    Node cur = new Node(genre, name);
+
+                    if(!genreMap.containsKey(genre)){
+                        genreMap.put(genre, new ArrayList<>());
+                    }
+                    if(!nameMap.containsKey(name)){
+                        nameMap.put(name, new ArrayList<>());
+                    }
+                    genreMap.get(genre).add(cur);
+                    nameMap.get(name).add(cur);
+
+
+                    
+                    
+                }
+                
+            }
+        }
+
+        
+
+    }
+
+    
+
+    
+}
+
+class InputReader extends InputStream {
     private InputStream stream;
     private byte[] buf = new byte[1024];
     private int curChar;
@@ -237,3 +321,101 @@ public class InputReader extends InputStream {
     }
 
 }
+
+class OutputWriter {
+    public final OutputStream out;
+
+    public OutputWriter(OutputStream outputStream) {
+        out = outputStream;
+    }
+
+    public void print(Object... objects) {
+        try {
+            for (int i = 0; i < objects.length; i++) {
+                if (i != 0) {
+                    out.write(' ');
+                }
+                out.write(objects[i].toString().getBytes("UTF-8"));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void printLine(Object... objects) {
+        print(objects);
+        try {
+            out.write('\n');
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void close() {
+        try {
+            out.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void flush() {
+        try {
+            out.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void printString(String s) {
+        if (s == null) {
+            printLine(-1);
+        } else {
+            try {
+                printLine(s.getBytes("UTF-8").length, s);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void printBoolean(boolean b) {
+        printLine(b ? 1 : 0);
+    }
+
+    public void printEnum(Enum e) {
+        printString(e == null ? null : e.name());
+    }
+
+    public void printTopCoder(Object o) {
+        if (o == null) {
+            printString(null);
+        } else if (o instanceof Integer) {
+            printLine("int", o);
+        } else if (o instanceof Long) {
+            printLine("long", o);
+        } else if (o instanceof Double) {
+            printLine("double", o);
+        } else if (o instanceof String) {
+            printLine("String");
+            printString((String) o);
+        } else if (o instanceof int[]) {
+            printLine("int[]", ((int[]) o).length);
+            for (int i : (int[]) o)
+                printLine(i);
+        } else if (o instanceof long[]) {
+            printLine("long[]", ((long[]) o).length);
+            for (long i : (long[]) o)
+                printLine(i);
+        } else if (o instanceof double[]) {
+            printLine("double[]", ((double[]) o).length);
+            for (double i : (double[]) o)
+                printLine(i);
+        } else if (o instanceof String[]) {
+            printLine("String[]", ((String[]) o).length);
+            for (String i : (String[]) o)
+                printString(i);
+        }
+    }
+}
+

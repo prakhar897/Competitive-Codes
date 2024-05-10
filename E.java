@@ -1,14 +1,120 @@
-package template;
-
+import java.io.OutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.BufferedWriter;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.InputMismatchException;
+import java.io.IOException;
+import java.io.Writer;
+import java.io.OutputStreamWriter;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.InputMismatchException;
 
+
+import java.util.*;
+
 /**
- * @author Egor Kulikov (kulikov@devexperts.com)
+ * Built using CHelper plug-in
+ * Actual solution is at the top
  */
-public class InputReader extends InputStream {
+public class E {
+    public static void main(String[] args) {
+        InputStream inputStream = System.in;
+        OutputStream outputStream = System.out;
+        InputReader in = new InputReader(inputStream);
+        OutputWriter out = new OutputWriter(outputStream);
+        CGA solver = new CGA();
+        solver.solve(1, in, out);
+        out.close();
+    }
+
+    static class CGA {
+        public void solve(int testNumber, InputReader in, OutputWriter out) {
+            int t = in.readInt();
+            outer:while(t-->0){
+                int n =in.readInt();
+                String s = in.readToken();
+                ArrayList<Integer> al  = new ArrayList<>();
+
+                for(int i=1;i<=Math.ceil(Math.sqrt(n));i++){
+                    if(n%i == 0){
+                        al.add(i);
+                        al.add(n/i);   
+                    }
+                }
+
+                Collections.sort(al);
+
+                for(int i=0;i<al.size();i++){
+                    String rs = new StringBuilder(s).reverse().toString();
+                    if(check(al.get(i),s) || check(al.get(i),rs)){
+                        System.out.println(al.get(i));
+                        continue outer;
+                    }
+                }
+
+                System.out.println(n);
+            }
+            
+        }
+
+        public boolean check(int n, String s){
+            //System.out.println("checking for" + n);
+            String rep = s.substring(0,n);
+            int flag = 0;
+            for(int i=n;i<=s.length()-n;i+=n){
+                String s2 = s.substring(i,i+n);
+              //  System.out.println(rep);
+             //   System.out.println(s2);
+                if(rep.equals(s2)){
+                    continue;
+                } else if(flag == 0){
+                    int diff = 0;
+                    for(int j=0;j<s2.length();j++){
+                        if(rep.charAt(j) != s2.charAt(j)){
+                            diff++;
+                            if(diff > 1){
+                                break;
+                            }
+                        }
+                    }
+                  //  System.out.println("diff:" +diff);
+                    if(diff == 1){
+                        flag = 1;
+                    } else {
+                        return false;
+                    }
+                    
+                } else {
+                  //   System.out.println("asssd for" + i);
+        
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        
+
+    }
+
+    
+
+    
+}
+
+class InputReader extends InputStream {
     private InputStream stream;
     private byte[] buf = new byte[1024];
     private int curChar;
@@ -237,3 +343,101 @@ public class InputReader extends InputStream {
     }
 
 }
+
+class OutputWriter {
+    public final OutputStream out;
+
+    public OutputWriter(OutputStream outputStream) {
+        out = outputStream;
+    }
+
+    public void print(Object... objects) {
+        try {
+            for (int i = 0; i < objects.length; i++) {
+                if (i != 0) {
+                    out.write(' ');
+                }
+                out.write(objects[i].toString().getBytes("UTF-8"));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void printLine(Object... objects) {
+        print(objects);
+        try {
+            out.write('\n');
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void close() {
+        try {
+            out.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void flush() {
+        try {
+            out.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void printString(String s) {
+        if (s == null) {
+            printLine(-1);
+        } else {
+            try {
+                printLine(s.getBytes("UTF-8").length, s);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void printBoolean(boolean b) {
+        printLine(b ? 1 : 0);
+    }
+
+    public void printEnum(Enum e) {
+        printString(e == null ? null : e.name());
+    }
+
+    public void printTopCoder(Object o) {
+        if (o == null) {
+            printString(null);
+        } else if (o instanceof Integer) {
+            printLine("int", o);
+        } else if (o instanceof Long) {
+            printLine("long", o);
+        } else if (o instanceof Double) {
+            printLine("double", o);
+        } else if (o instanceof String) {
+            printLine("String");
+            printString((String) o);
+        } else if (o instanceof int[]) {
+            printLine("int[]", ((int[]) o).length);
+            for (int i : (int[]) o)
+                printLine(i);
+        } else if (o instanceof long[]) {
+            printLine("long[]", ((long[]) o).length);
+            for (long i : (long[]) o)
+                printLine(i);
+        } else if (o instanceof double[]) {
+            printLine("double[]", ((double[]) o).length);
+            for (double i : (double[]) o)
+                printLine(i);
+        } else if (o instanceof String[]) {
+            printLine("String[]", ((String[]) o).length);
+            for (String i : (String[]) o)
+                printString(i);
+        }
+    }
+}
+
